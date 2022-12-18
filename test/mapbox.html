@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Display navigation directions</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <script src="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+</head>
+
+<body>
+    <script type="module">
+         
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"; 
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js"; 
+        import { getAuth, updateProfile, signInWithEmailAndPassword, createUserWithEmailAndPassword  } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"
+        const firebaseConfig = {
+            apiKey: "AIzaSyAc0rrI2WQjALcOXw9UYnlkWS3ZkkyuaIU",
+            authDomain: "imageup-ca4e9.firebaseapp.com", projectId: "imageup-ca4e9", storageBucket: "imageup-ca4e9.appspot.com", messagingSenderId: "407084062029", appId: "1:407084062029:web:3fd6fb2ee86229252e1304", measurementId: "G-RGKGRTNZ9K"
+        };
+        const app = initializeApp(firebaseConfig); 
+        const analytics = getAnalytics(app);
+        
+        
+        console.log(app);
+        let email = "jasfdfsfy@gmail.com"
+        let password = "123456"
+        let auth = getAuth()
+        console.log(auth);
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // Signed in 
+                var user = userCredential.user;
+                updateProfile(user, {
+                    displayName: "name"
+                }).then(function (e) {
+                    console.log(e,"success");
+                }).catch(function (error) {
+                     console.log(error, "error");
+                });
+                console.log(user);
+                // ...
+            })
+            .catch((error) => {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(error);
+                // ..
+            });
+
+    </script>
+
+</body>
+
+</html>

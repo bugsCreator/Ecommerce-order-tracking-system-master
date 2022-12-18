@@ -1,0 +1,1 @@
+var stripe = require('stripe')('ca_FkyHCg7X8mlvCUdMDao4mMxagUfhIwXb');

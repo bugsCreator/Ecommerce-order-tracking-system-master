@@ -1,0 +1,106 @@
+<%- include('../layouts/header') %>
+    <!-- signup form -->
+    <section id="login-form" class="vertical-center signup-form">
+        <div class="container text-center">
+            <h2>Signup here....</h2>
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="signin-signup-form">
+                        <div class="form-group">
+                            <input type="text" name="name" class="form-control" placeholder="Name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" class="form-control" placeholder="email">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="mobile" class="form-control" placeholder="mobile">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="address" class="form-control" placeholder="address">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" class="form-control" placeholder="password">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" class="form-control" placeholder="confirm-password">
+                        </div>
+                        <input type="hidden" name="lat" class="lat">
+                        <input type="hidden" name="long" class="long">
+                        <button type="submit" class="btn btn-primary btn-signin-signup" name="signin">Signup</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script>
+            let submitable = false;
+            let coords = null;
+            if (navigator.geolocation) {
+                submitable = true;
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+
+            function showPosition(position) {
+                coords = position.coords;
+                $('.lat').val(position.coords.latitude);
+                $('.long').val(position.coords.longitude);
+                console.log(position.coords);
+
+            }
+            $('.signin-signup-form').on('submit', function(e) { //use on if jQuery 1.7+
+                e.preventDefault(); //prevent form from submitting
+                const formData = new FormData(document.querySelector("#login-form > div > div > div > form"));
+                let obj = Object.fromEntries(formData)
+                register(obj.email, obj.password, obj.name);
+                console.log("data", data);
+                // if (submitable) {
+                //     $.ajax({
+                //         url: '/user/signup',
+                //         type: 'POST',
+                //         data: data,
+                //         success: function(data) {
+                //             console.log(data);
+                //             if (data.status == 200) {
+                //                 window.location.href = '/';
+                //             } else {
+                //                 alert('Signup failed');
+                //             }
+                //         }
+                //     });
+                // } else {
+                //     alert('Please allow location access');
+                // }
+            });
+
+
+            const register = (email, password, name) => {
+                let auth = getAuth()
+                console.log(auth);
+                createUserWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        // Signed in 
+                        var user = userCredential.user;
+                        updateProfile(user, {
+                            displayName: name
+                        }).then(function(e) {
+                            window.href = '/';
+                        }).catch(function(error) {
+                            alert('Signup failed');
+                            console.error(error);
+                        });
+                        console.log(user);
+                        // ...
+                    })
+                    .catch((error) => {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        alert('Signup failed');
+                        console.error(error);
+                        // ..
+                    });
+            }
+        </script>
+
+    </section>
+    <%- include('../layouts/footer') %>

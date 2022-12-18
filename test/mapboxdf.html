@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Display navigation directions</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css" rel="stylesheet" />
+    <style>
+        html,
+        body,
+        #map {
+            height: 100%;
+        }
+    </style>
+</head>
+
+
+
+<body>
+    <div id='map'></div>
+    <script>
+        // This is the token from their docs, don't be evil
+        mapboxgl.accessToken = 'pk.eyJ1IjoiamF5Nzg3ODE1IiwiYSI6ImNrczYybm02ZDA3MGgybnJucm5rdzBoZGsifQ.OWRmEYeFJC1mbCPb61cbdA'
+
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v9',
+            center: [18.0944238, 42.65066059999999],
+            zoom: 9,
+        })
+
+        map.on('load', () => {
+
+            $.get(`https://api.mapbox.com/directions/v5/mapbox/driving/18.0944238,42.65066059999999;15.981919,45.8150108?access_token=${mapboxgl.accessToken}&geometries=geojson`, data => {
+
+                map.addLayer({
+                    id: 'route',
+                    type: 'line',
+                    source: {
+                        type: 'geojson',
+                        data: {
+                            type: 'Feature',
+                            properties: {},
+                            geometry: data.routes[0].geometry,
+                        },
+                    },
+                    layout: {
+                        'line-join': 'round',
+                        'line-cap': 'round',
+                    },
+                    paint: {
+                        'line-color': '#ff7e5f',
+                        'line-width': 8,
+                    },
+                })
+
+            })
+
+        })
+    </script>
+</body>
+
+
+</html>
