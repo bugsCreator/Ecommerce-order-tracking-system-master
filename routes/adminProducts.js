@@ -2,7 +2,7 @@ const router = require('express').Router();
 const mkdirp = require('mkdirp');
 const fs = require('fs-extra');
 const resizeImg = require('resize-img');
-
+var fss = require('fs');
 //get product model
 const Product = require('../models/product');
 //get catagory model
@@ -94,22 +94,35 @@ router.post('/add-product', (req, res, next) => {
                     if (err) {
                         return console.log(err);
                     }
+                    let dir = 'public/productImages/' + product._id
+                    if (!fs.existsSync(dir)){
+                        fs.mkdirSync(dir, { recursive: true });
+                    }
 
-                    mkdirp('public/productImages/' + product._id, (err) => {
-                        return console.log(err);
-                    });
+                     dir = 'public/productImages/' + product._id+"/gallery"
+                    if (!fs.existsSync(dir)){
+                        fs.mkdirSync(dir, { recursive: true });
+                    }
 
-                    mkdirp('public/productImages/' + product._id + '/gallery', (err) => {
-                        return console.log(err);
-                    });
+                     dir = 'public/productImages/' +  '/gallery/thumbs'
+                    if (!fs.existsSync(dir)){
+                        fs.mkdirSync(dir, { recursive: true });
+                    }
 
-                    mkdirp('public/productImages/' + product._id + '/gallery/thumbs', (err) => {
-                        return console.log(err);
-                    });
+
+
+                    // mkdirp('public/productImages/' + product._id + '/gallery', (err) => {
+                    //     return console.log(err);
+                    // });
+
+                    // mkdirp('public/productImages/' + product._id + '/gallery/thumbs', (err) => {
+                    //     return console.log(err);
+                    // });
 
                     if (imageFile != "") {
                         var productImage = req.files.image;
-                        var path = 'public/productImages/' + product._id + '/' + imageFile;
+                        var path = 'public/productImages/' +  product._id+'/' + imageFile;
+                        console.log(path);
 
                         productImage.mv(path, (err) => {
                             return console.log(err);
